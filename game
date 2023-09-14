@@ -1,0 +1,288 @@
+///////////////////////////////////////////////////////////setup 코드////////////////////////////////////////////////////////
+float playerX, playerY;     // 플레이어의 현재 위치
+float playerSpeed = 5;      // 플레이어 이동 속도
+float playerSize = 0.7;      // 플레이어 크기
+float playerDirectionX = 0; // 플레이어의 X축 이동 방향
+float playerDirectionY = 0; // 플레이어의 Y축 이동 방향
+
+int numBalls = 20;          // 생성할 공의 개수
+float[] ballX = new float[numBalls];   // 공의 X 위치 배열
+float[] ballY = new float[numBalls];   // 공의 Y 위치 배열
+float[] ballSpeedX = new float[numBalls];  // 공의 X 속도 배열
+float[] ballSpeedY = new float[numBalls];  // 공의 Y 속도 배열
+float ballSize =0.5 ;          // 공의 크기
+
+int lives = 3; // 목숨 개수
+
+int numGrass = 60; // 그릴 잔디의 개수
+float[] grassX = new float[numGrass]; // 잔디의 X 좌표 배열
+float[] grassY = new float[numGrass]; // 잔디의 Y 좌표 배열
+
+//시간
+int startTime;
+boolean running = false;
+//시간
+
+
+void setup() {
+  size(800, 800);
+  playerX = width / 2;
+  playerY = height / 2;
+  
+   // 잔디 초기화
+  for (int i = 0; i < numGrass; i++) {
+    grassX[i] = random(width);
+    grassY[i] = random(height);
+  }
+  
+  //시간
+  textSize(30);
+  textAlign(CENTER);
+  noLoop();
+  //시간
+
+     // 공 초기화
+ for (int i = 0; i < numBalls; i++) {
+    float initialDistance;
+    do {
+      ballX[i] = random(width);
+      ballY[i] = random(height);
+      initialDistance = dist(playerX, playerY, ballX[i], ballY[i]);
+    } while (initialDistance < (playerSize / 0.7 + (ballSize*40) / 0.7) * 2);
+    
+    ballSpeedX[i] = random(-4, 4);
+    ballSpeedY[i] = random(-4, 4);
+  }
+}
+
+void draw() {
+   background(34, 139, 34);
+     // 배경 그리기
+  background(34, 139, 34);
+  
+  // 잔디 그리기
+  fill(85, 107, 47); // 잔디 색상
+  noStroke(); // 테두리 없음
+  
+  for (int i = 0; i < numGrass; i++) {
+    drawGrass(grassX[i], grassY[i]);
+  }
+  
+  
+  // 플레이어 그리기
+  fill(0, 0, 255);
+  stroke(0.5);
+  bono(playerX, playerY, playerSize, playerSize);
+   
+  
+//시간
+fill(0);
+  if (running) {
+    int currentTime = millis() - startTime;
+    int seconds = (currentTime / 1000) % 60;
+    int minutes = (currentTime / (1000 * 60)) % 60;
+    
+    
+    String timeString = nf(minutes, 2) + ":" + nf(seconds, 2);
+    text(timeString, 32,22);
+  } else {
+    text("Press 'T' to start", width/2, height/2);
+  }
+  //시간 
+  
+  
+
+  // 이동 로직
+  playerX += playerSpeed * playerDirectionX;
+  playerY += playerSpeed * playerDirectionY;
+
+  // 화면 경계에 도달하면 플레이어 위치 제한
+  playerX = constrain(playerX, playerSize / 2, width - playerSize / 2);
+  playerY = constrain(playerY, playerSize / 2, height - playerSize / 2);
+
+  // 공 그리기 및 이동
+  for (int i = 0; i < numBalls; i++) {
+    fill(255, 0, 0);
+    pig(ballX[i], ballY[i], ballSize, ballSize);
+
+    ballX[i] += ballSpeedX[i];
+    ballY[i] += ballSpeedY[i];
+
+        // 공이 화면 밖으로 나가면 다시 랜덤한 위치에서 시작
+  if (ballX[i] < 0 || ballX[i] > width) {
+    ballSpeedX[i] *= -1; // X 방향 속도를 반대로 변경하여 튕겨나옴
+    ballX[i] = constrain(ballX[i], 0, width); // 화면 안으로 고정
+  }
+  if (ballY[i] < 0 || ballY[i] > height) {
+    ballSpeedY[i] *= -1; // Y 방향 속도를 반대로 변경하여 튕겨나옴
+    ballY[i] = constrain(ballY[i], 0, height); // 화면 안으로 고정
+  }
+// 플레이어와 공의 충돌 검사
+  float dx= playerX-ballX[i];
+  float dy= playerY-ballY[i];
+  float distance = sqrt(dx*dx+dy*dy);
+    if (distance < 27) {
+      // 충돌 발생: 게임 오버 또는 점수 감소 로직
+     lives--;
+     
+      if (lives < 1) {
+        gameOver();
+     
+      } else {
+        // 목숨이 남아있을 경우 플레이어를 초기 위치로 되돌림
+        playerX = width / 2;
+        playerY = height / 2;
+      }
+    }
+  }
+// 오른쪽 상단에 목숨 개수를 원으로 표시
+  fill(255, 0, 0);
+  for (int i = 0; i < lives; i++) {
+    int lifeX = width - 40 - i * 50;
+    int lifeY = 30;
+    captain(lifeX,lifeY,0.5); // 원으로 목숨 개수 표시
+  }
+}
+
+
+void gameOver() {
+  // 게임 오버 처리: 점수 초기화 또는 게임 재시작 로직 추가
+  running=false;
+  text("Game Over", width/2, height/2);
+  text("Please 'T' to retry", width/2, height/2+30);
+  lives=3;
+ setup();
+
+
+}
+void keyPressed() {
+  // 키 입력 처리
+  if (key == 'a' || key == 'A') {
+    playerDirectionX = -1;
+  } else if (key == 'd' || key == 'D') {
+    playerDirectionX = 1;
+  } else if (key == 'w' || key == 'W') {
+    playerDirectionY = -1;
+  } else if (key == 's' || key == 'S') {
+    playerDirectionY = 1;
+  }
+  //시간
+    if (key == 't' || key == 'T') {
+    if (!running) {
+      startTime = millis();
+      running = true;
+      loop();  // 스톱워치 시작 시 loop를 활성화하여 시간을 업데이트합니다.
+    }
+  }
+  //시간
+  if (key == 't' || key == 'T') {
+    if (!running) {
+      startTime = millis();
+      running = true;
+      loop();  // 스톱워치 시작 시 loop를 활성화하여 시간을 업데이트합니다.
+    }
+  }
+}
+
+void keyReleased() {
+  // 키 릴리스 처리 (여기에서는 플레이어의 이동 방향을 멈추도록 설정)
+  if ((key == 'a' || key == 'A') || (key == 'd' || key == 'D')) {
+    playerDirectionX = 0;
+  } else if ((key == 'w' || key == 'W') || (key == 's' || key == 'S')) {
+    playerDirectionY = 0;
+  }
+}
+
+/////////////////////////////////////////////////////////플레이어 캐릭터/////////////////////////////////////////////
+void bono(float x, float y, float d,float w){
+  fill(100,149,237);
+  ellipse(x,y,d*50,w*50); // 얼굴
+  
+  fill(0);
+  ellipse(x+20*d,y-5*d,2*d,2*w);
+  fill(0);
+  ellipse(x-20*d,y-5*d,2*d,2*w); //눈
+  
+  fill(225);
+  ellipse(x-4.5*d, y+5*d, 10*d,10*w);  //코 아래
+  fill(225);
+  ellipse(x+4.5*d, y+5*d, 10*d,10*w);
+
+  fill(0);
+  ellipse(x,y,7*d,7*w); //코
+  
+  line(x-4.5*d, y+2.5*d, x-9.5*d, y);// 위
+  line(x-4.5*d, y+5*d, x-12*d, y+5*d);// 왼쪽 콧수염 중간
+  line(x-4.5*d, y+7.5*d, x-9.5*d, y+10*d);// 아래
+  
+  line(x+5.5*d, y+2.5*d, x+10.5*d, y);// 위
+  line(x+5.5*d, y+5*d, x+13*d, y+5*d);// 오른쪽 콧수염 중간
+  line(x+5.5*d, y+7.5*d, x+10.5*d, y+10*d);// 아래
+
+}
+
+////////////////////////////////////////////목숨 이미지/////////////////////////////////////////////
+void captain(float x,float y, float d){
+//원
+  fill(220,20,60);
+  circle(x,y,60*d);
+  fill(255,255,255);
+  circle(x,y,50*d);
+  fill(220,20,60);
+  circle(x,y,40*d);
+  fill(0,0,255);
+  circle(x,y,30*d);
+  //별
+  fill(245,245,245);
+  beginShape();
+  vertex(x,y-15*d);
+  vertex(x+5*d,y-5*d);
+  vertex(x+14*d,y-5*d);
+  vertex(x+5*d,y);
+  vertex(x+11*d,y+10*d);
+  vertex(x,y+5*d);
+  vertex(x-11*d,y+10*d);
+  vertex(x-5*d,y);
+  vertex(x-14*d,y-5*d);
+  vertex(x-5*d,y-5*d);
+  vertex(x,y-15*d);
+  endShape();
+  //별 중간 선
+  line(x+5*d,y-5*d,x,y);
+  line(x+5*d,y,x,y);
+  line(x,y+5*d,x,y);
+  line(x-5*d,y,x,y);
+  line(x-5*d,y-5*d,x,y);
+}
+
+/////////////////////////////////////////////////////////돼지///////////////////////////////////////////////
+void pig(float x, float y,float z,float w){
+  fill(255,145,203);
+  triangle(x-5*z,y-17.5*z,x-20*z,y-5*z,x-15*z,y-30*z);
+  triangle(x+5*z,y-17.5*z,x+20*z,y-5*z,x+15*z,y-30*z);//귀
+  
+  ellipse(x,y,z*50,w*50);//얼굴
+  
+  fill(239,136,190);
+  ellipse(x,y+7.5*z,15*z,10*z);
+  fill(255,145,203);
+  arc(x,y+15*z,15*z,10*z,0,PI);//코,입
+  
+  fill(219,125,174);
+  circle(x-2.5*z,y+7.2*z,2.5*z);
+  circle(x+2.5*z,y+7.2*z,2.5*z);//콧구멍
+  
+  fill(0,0,0);
+  circle(x-10*z,y-10*z,5*z);
+  circle(x+10*z,y-10*z,5*z);//눈
+}
+
+/////////////////////////////////////////////////////////배경 이미지////////////////////////////////////////
+void drawGrass(float x, float y) {
+  // 잔디 모양 그리기
+  beginShape();
+  vertex(x, y);
+  vertex(x + 5, y - 20);
+  vertex(x + 10, y);
+  endShape(CLOSE);
+}
