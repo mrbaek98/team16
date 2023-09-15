@@ -4,14 +4,13 @@ float playerSpeed = 5;      // 플레이어 이동 속도
 float playerSize = 0.7;      // 플레이어 크기
 float playerDirectionX = 0; // 플레이어의 X축 이동 방향
 float playerDirectionY = 0; // 플레이어의 Y축 이동 방향
-
+float initialDistance;
 int numBalls = 20;          // 생성할 공의 개수
 float[] ballX = new float[numBalls];   // 공의 X 위치 배열
 float[] ballY = new float[numBalls];   // 공의 Y 위치 배열
 float[] ballSpeedX = new float[numBalls];  // 공의 X 속도 배열
 float[] ballSpeedY = new float[numBalls];  // 공의 Y 속도 배열
 float ballSize =0.5 ;          // 공의 크기
-
 int lives = 3; // 목숨 개수
 
 int numGrass = 60; // 그릴 잔디의 개수
@@ -117,23 +116,31 @@ fill(0);
     ballSpeedY[i] *= -1; // Y 방향 속도를 반대로 변경하여 튕겨나옴
     ballY[i] = constrain(ballY[i], 0, height); // 화면 안으로 고정
   }
-// 플레이어와 공의 충돌 검사
-  float dx= playerX-ballX[i];
-  float dy= playerY-ballY[i];
-  float distance = sqrt(dx*dx+dy*dy);
-    if (distance < 27) {
-      // 충돌 발생: 게임 오버 또는 점수 감소 로직
-     lives--;
-     
-      if (lives < 1) {
-        gameOver();
-     
-      } else {
-        // 목숨이 남아있을 경우 플레이어를 초기 위치로 되돌림
-        playerX = width / 2;
-        playerY = height / 2;
-      }
-    }
+// 공과 충돌 검사
+float dx = playerX - ballX[i];
+float dy = playerY - ballY[i];
+float distance = sqrt(dx * dx + dy * dy);
+
+if (distance < 27) {
+  // 충돌 발생: 게임 오버 또는 목숨 감소 로직
+  lives--;
+  
+  if (lives < 1) {
+    gameOver();
+  } else {
+    // 목숨이 남아있을 경우 플레이어를 초기 위치로 되돌림
+    playerX = width / 2;
+    playerY = height / 2;
+    
+    // 공의 위치도 재설정
+    do {
+      ballX[i] = random(width);
+      ballY[i] = random(height);
+      initialDistance = dist(playerX, playerY, ballX[i], ballY[i]);
+    } while (initialDistance < (playerSize / 0.7 + (ballSize * 40) / 0.7) * 2);
+  }
+}
+
   }
 // 오른쪽 상단에 목숨 개수를 원으로 표시
   fill(255, 0, 0);
