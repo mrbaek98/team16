@@ -1,0 +1,14 @@
+#include <iostream>
+using namespace std;
+void main() {
+    float c, dt, t, num, anal;
+    //differentiation
+    cout << " c ? = ";
+    cin >> c;
+    cout << " t dt ? = ";
+    cin >> t >> dt;
+    anal = c/(c*t);
+    num = (log(c * (t + dt)) - log(c * t)) / dt;
+    cout << " num " << num << " anal " << anal << endl;
+    cout << " error = " << (num - anal) / anal * 100 << "%\n";
+}
