@@ -1,0 +1,22 @@
+#include <iostream>
+using namespace std;
+
+void main() {
+   //다항함수 항의 개수 3
+   //미분
+
+   float a, b, c, x, y, z, t, dt, num, anal;
+   cout << "a b c ? = ";
+   cin >> a >> b >> c; // 다함함수 계수입력
+   cout << "x y z ? = ";
+   cin >> x >> y >> z;//3개의 항의 차수입력 a*t^x + b*t^y + c*t^z 함수가 됩니다.
+   cout << "t dt ? =";
+   cin >> t >> dt; //어느 지점에서의 기울기값을 찾을것인가 t , num방식으로 얼만큼의 간격을 해줄것인가 dt
+
+   anal = a * x * pow(t, x - 1) + b * y * pow(t, y - 1) + c * z * pow(t, z - 1);
+   num = ((a * pow(t + dt, x) + b * pow(t + dt, y) + c * pow(t + dt, z)) - (a * pow(t, x) + b * pow(t, y) + c * pow(t, z))) / dt;
+   cout << " num " << num << " anal " << anal << endl;
+   cout << " error = " << (num - anal) / anal * 100 << "%\n"; 
+  
+
+}
