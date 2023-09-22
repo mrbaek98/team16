@@ -11,7 +11,7 @@ void main() {
     cin >> a >> b;
 
    
-    cout << "t dt ? = ";    // t는 각도 쓰면 됩니다 ex) 30, 60, 90...        dt는 구분구적법에서의 1/n   ex 0.000001  이 또한  t와 dt 중간에 스페이스바 눌러야합니다.
+    cout << "t dt ? = "; 
     cin >> t >> dt;
     anal = a *b* cos(b*t);
     num = a*(sin(b*(t + dt)) - sin(b*t)) / dt;
