@@ -1,0 +1,28 @@
+#include <iostream>
+using namespace std;
+
+void main() {
+   //다항함수 항의 개수 3
+  
+
+   float a, b, c, x, y, z, t, dt, num, anal;
+   cout << "a b c ? = ";
+   cin >> a >> b >> c; // 다함함수 계수입력
+   cout << "x y z ? = ";
+   cin >> x >> y >> z;//3개의 항의 차수입력 a*t^x + b*t^y + c*t^z 함수가 됩니다.
+   
+
+  //적분
+   float intanal, intnum = 0, n, m;
+   int N;
+   cout << "n m N ? = "; // n~m까지 적분하고 사이사이 간격은 N으로 잡기
+   cin >> n >> m >> N;
+   intanal = ((a * pow(m, x + 1)) / (x + 1) + (b * pow(m, y + 1)) / (y + 1) + (c * pow(m, z + 1)) / (z + 1) ) - ((a * pow(n, x + 1)) / (x + 1) + (b * pow(n, y + 1)) / (y + 1) + (c * pow(n, z + 1)) / (z + 1));
+   dt = (m - n) / N;
+   for (int i = 0; i < N; i++) {
+      intnum += (a * pow(n + dt * i, x) + b * pow(n + dt * i, y) + c * pow(n + dt * i, z)) * dt;
+   }
+   cout << " intnum " << intnum << " intanal " << intanal << endl;
+   cout << " error = " << (intnum - intanal) / intanal * 100 << "%\n";
+
+}
