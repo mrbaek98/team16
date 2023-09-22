@@ -1,0 +1,20 @@
+#include <iostream>
+using namespace std;
+    void main() {
+        float c, a, b;
+        int N;
+
+        cout << " c a b N =";
+        cin >> c >> a >> b >> N;
+
+        float intanal = ((c * b * log(c * b) - c * b) - (c * a * log(c * a) - c * a)) / c;
+        float dt = (b - a) / N;
+        float intnum = 0;
+
+        for (int i = 1; i <= N; i++) {
+    
+            intnum += log(c * (a + i * dt)) * dt;
+        }
+        cout << " intnum " << intnum << " intanal " << intanal << endl;
+        cout << " error = " << (intnum - intanal) / intanal * 100 << "%\n";
+    }
