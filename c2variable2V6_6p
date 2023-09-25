@@ -1,0 +1,20 @@
+#include <iostream> 
+using namespace std;
+void main() {
+	int ii, jj;
+	ii = -2; 
+	//0000 0000 0000 0000 0000 0000 0000 0010 = 2
+	//1111 1111 1111 1111 1111 1111 1111 1110 = ffff fffe =-2
+	jj = -512;
+	//0000 0000 0000 0000 0000 0010 0000 0000 = 512
+	//1111 1111 1111 1111 1111 1110 0000 0000 = ffff fe00 = -512
+	cout << hex << " 0x" << ii << endl;
+	cout << hex << " 0x" << jj << endl;
+
+
+	//short는 2바이트로 int보다 메모리할당이 절반크기이다.
+	//16비트로 표현이된다. 따라서 ii, jj를 short로 하면 
+	//fffe , fe00이 나올것이다
+	cout << hex << " 0x" << (short)ii << endl;
+	cout << hex << " 0x" << (short)jj << endl;
+}
