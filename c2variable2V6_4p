@@ -1,0 +1,14 @@
+#include <iostream>
+using namespace std;
+int main() {
+   int a = 5, b = 6, c = 2;
+   int d = (a << 6) | (b << 3) | c;
+   cout << oct << a << "" << b << "" << c << endl;
+   cout << d << endl;
+   a = b = c = 0;
+   a = (d & 0700) >> 6; //앞에 있는 0은 octal로 표현한다는 숫자 
+   b = (d & 070) >> 3;
+   c = (d & 7);
+   cout << a << "" << b << "" << c << endl;
+   return 0;
+}
