@@ -1,0 +1,26 @@
+#include <iostream>
+using namespace std;
+void main() {
+	int sum[10], N;
+	float root[10];
+	for (int i = 0; i < 10; i++) {
+		N = i + 1;
+		*(sum + i) = N * (N + 1) / 2;
+		*(root + i) = sqrt((float)N);
+	}
+	*(sum + 5) = 1;
+	*(root + 6) = 1.1;
+
+	for (int i = 0; i < 10; i++)
+		cout << sum[i] << " " << root[i]<<" ";
+	cout << endl <<endl;
+	for (int i = 0; i < 10; i++) {
+		N = i + 1;
+		sum[i] = N * (N + 1) / 2;
+		root[i] = sqrt((float)N);
+	}
+	sum[5] = 2;
+	root[6] = 2.2;
+	for (int i = 0; i < 10; i++)
+		cout << sum[i] << " " << root[i] << " ";
+}
