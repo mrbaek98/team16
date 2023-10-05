@@ -1,0 +1,46 @@
+#include <iostream>
+using namespace std;
+
+// 2*2행렬식함수
+float calculate2x2Determinant(float mat[2][2]) {
+    return (mat[0][0] * mat[1][1]) - (mat[0][1] * mat[1][0]);
+}
+
+//3*3행렬식함수
+float calculate3x3Determinant(float mat[3][3]) {
+    return (mat[0][0] * mat[1][1] * mat[2][2]) +
+        (mat[0][1] * mat[1][2] * mat[2][0]) +
+        (mat[0][2] * mat[1][0] * mat[2][1]) -
+        (mat[0][2] * mat[1][1] * mat[2][0]) -
+        (mat[0][0] * mat[1][2] * mat[2][1]) -
+        (mat[0][1] * mat[1][0] * mat[2][2]);
+}
+
+int main() {
+    // Matrix size (2x2 or 3x3)
+    int N; 
+    float determinant;// Change this to 2 for a 2x2 matrix
+    cout << "2 or 3 = ";
+    cin >> N;
+
+    if (N == 2) {
+        float mat[2][2] = {
+            {3,4},
+            {5,6}
+        };
+        determinant = calculate2x2Determinant(mat);
+    }   
+    else if (N == 3) {
+        float mat[3][3] = {
+            {2, 3, 1},
+            {5, 4, 7},
+            {0, 1, 9}
+        };
+        determinant = calculate3x3Determinant(mat);
+    }
+
+    //determinant 출력
+    cout << "Determinant: " << determinant << endl;
+
+    return 0;
+}
