@@ -1,0 +1,47 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    // 행렬 차원크기1*2행렬 곱하기 2*2행렬
+    int N = 1, M =2, K = 2; // A: NxM, B: MxK
+
+    
+    float A[1][2] = {2,3};
+
+    float** B = new float*[M];
+    for (int i = 0; i < M; i++) {
+        B[i] = new float[K];
+    }
+    B[0][0] = 4; B[0][1] = 5;
+    B[1][0] = 6; B[1][1] = 7; 
+   
+
+
+    float** C = new float*[N];
+    for (int i = 0; i < N; i++) {
+        C[i] = new float[K];
+    }
+    //C = A * B
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < K; j++) {
+            C[i][j] = 0;
+            for (int k = 0; k < M; k++) {
+                C[i][j] += A[i][k] * B[k][j];
+            }
+        }
+    }
+
+    //C행렬 콘솔 출력
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < K; j++) {
+            cout << C[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    // 동적메모리 삭제
+    delete[] B;
+   delete[] C;
+
+    return 1;
+}
