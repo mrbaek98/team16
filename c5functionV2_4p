@@ -1,0 +1,42 @@
+// 연습 1-(1) 섭씨 30도를 화씨로
+#include <iostream>
+using namespace std;
+float cel2faren(float cc) {
+   return cc * 9.0 / 5.0 + 32;
+}
+
+void main() {
+   float cel, faren;
+   cel = 30.0;
+   faren = cel2faren(cel);
+   cout << "faren = " << faren << endl;
+}
+
+
+// 연습 1-(2) 섭씨 100도를 화씨로
+#include <iostream>
+using namespace std;
+float cel2faren(float cc) {
+   return cc * 9.0 / 5.0 + 32;
+}
+
+void main() {
+   float cel, faren;
+   cel = 100.0;
+   faren = cel2faren(cel);
+   cout << "faren = " << faren << endl;
+}
+
+// 연습 2 화씨에서 섭씨로 바꾸는 함수 만들기
+#include <iostream>
+using namespace std;
+float faren2cel(float ff) {
+   return (ff -32.0) *5.0 / 9.0 ;
+}
+
+void main() {
+   float cel, faren;
+   faren = 68.0;
+   cel = faren2cel(faren);
+   cout << "cel = " << cel << endl;
+}
