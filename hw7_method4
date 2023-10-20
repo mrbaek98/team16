@@ -47,6 +47,6 @@ int All(char* fn) {
 }
 
 int main(){
-    All((char*)"jsbin4.dat");
+    All((char*)"16bin4.dat");
     return 0;
 }
