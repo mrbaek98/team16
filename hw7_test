@@ -9,7 +9,7 @@ int main() {
     float reader3[3];
 
     // 파일 열기
-    ifstream infile("16bin4.dat", ios::binary | ios::in);//읽고싶은 파일명만 바꾸면 된다.
+    ifstream infile("16bin3.dat", ios::binary | ios::in);
     if (!infile) {
         cout << "no file : " << endl;
         return 0;
@@ -17,8 +17,8 @@ int main() {
 
     // 값 읽기
     infile.read((char*)&reader1, sizeof(reader1));
-    infile.read((char*)&reader2, sizeof(reader2));
-    infile.read((char*)&reader3, sizeof(reader3));
+    infile.read((char*)reader2, sizeof(reader2));
+    infile.read((char*)reader3, sizeof(reader3));
 
     // 파일 닫기
     infile.close();
